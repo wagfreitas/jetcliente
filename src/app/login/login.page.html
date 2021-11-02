@@ -1,0 +1,32 @@
+
+<ion-content>
+  <div class="login-header">
+    <img src="./assets/img/logo.png" />
+    <!-- <h3>{{ 'APP_NAME' | translate }}</h3>
+    <p>{{ 'APP_SUBTEXT' | translate }} </p> -->
+  </div>
+  <div class="ion-padding">
+    <ion-list lines="none">
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input type="text" [(ngModel)]="email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Senha</ion-label>
+        <ion-input type="password" [(ngModel)]="password"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-button color="dark" slot="end" fill="clear" routerLink="/forget">
+         Esqueceu a Senha?
+        </ion-button>
+      </ion-item>
+    </ion-list>
+    <div style="padding:0px 16px">
+      <ion-button color="dark" expand="block" (click)="login()">{{'LOGIN' | translate }}</ion-button>
+      &nbsp;&nbsp;
+      <ion-button color="dark" fill="clear" expand="block" routerLink="/register" *ngIf="settings.canRiderSignup">
+       Registrar
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
