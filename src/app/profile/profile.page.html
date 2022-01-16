@@ -1,40 +1,166 @@
 <ion-header>
   <ion-toolbar color="dark">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{'BASIC_PROFILE' | translate}}</ion-title>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Perfil</ion-title>
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div *ngIf="user != null && user != undefined">
-    <div style="text-align:center">
-      <img src="{{ user.photoURL }}" onerror="this.src='./assets/img/default.png'"
-        style="width:80px;height:80px;border-radius:100px" (click)="chooseFile()">
-      <form ngNoForm>
-        <input id="avatar" name="file" type="file" (change)="upload()">
-      </form>
-    </div>
-    <ion-list lines="none">
-      <ion-item>
-        <ion-label position="stacked" color="primary">{{'FULLNAME' | translate}}</ion-label>
-        <ion-input type="text" [(ngModel)]="user.name"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked" color="primary">{{'PHONE_NUMBER' | translate}}</ion-label>
-        <ion-input type="text" [(ngModel)]="user.phoneNumber" [disabled]="user.isPhoneVerified"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked" color="primary">{{'EMAIL_ADDRESS' | translate}}</ion-label>
-        <ion-input type="text" [(ngModel)]="user.email" disabled></ion-input>
-      </ion-item>
-    </ion-list>
-    <div class="ion-padding">
-      <ion-button color="dark" expand="block" (click)="save()">{{'SAVE' | translate}}</ion-button>
-      &nbsp;
-      &nbsp;
-      <ion-button (click)="logout()" expand="block" fill="clear" color="dark">{{'LOGOUT' | translate}}</ion-button>
-    </div>
+    <form [formGroup]="ionicForm" (ngSubmit)="save(ionicForm.value)" novalidate>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-item>
+              <ion-label position="floating">Nome</ion-label>
+              <ion-input type="text" formControlName="nome" placeholder="Nome" required></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.nome.errors?.required">
+              Campo Obrigatorio.
+            </span>
+          </ion-col>
+
+          <ion-col size="6">
+            <ion-item>
+              <ion-label position="floating">Sobrenome</ion-label>
+              <ion-input type="text" formControlName="sobrenome" placeholder="Sobrenome" required></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.sobrenome.errors?.required">
+              Campo Obrigatorio.
+            </span>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="6" class="col-top-left">
+            <ion-item>
+              <ion-label position="floating">CPF</ion-label>
+              <ion-input type="text" formControlName="cpf" placeholder="CPF" required></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.cpf.errors?.required">
+              Campo Obrigatorio.
+            </span>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.cpf.errors?.pattern">
+              Somente Números.
+            </span>
+          </ion-col>
+
+          <ion-col size=6 class="col-top-right">
+            <ion-item lines="full">
+              <ion-label position="floating">Nascimento</ion-label>
+              <ion-datetime displayFormat="DD/MM/YYYY" formControlName="dtNasc" [value]="defaultDate"></ion-datetime>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size=4 class="col-top-left">
+            <ion-item>
+              <ion-label position="floating">DDD</ion-label>
+              <ion-input type="text" formControlName="ddd"></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.ddd.errors?.pattern">
+              Somente Numero.
+            </span>
+          </ion-col>
+          <ion-col size=8 class="col-top-left">
+            <ion-item>
+              <ion-label position="floating">Telefone</ion-label>
+              <ion-input type="text" formControlName="fone"></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.fone.errors?.pattern">
+              Somente Numero.
+            </span>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="col-top-left">
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input type="email" formControlName="email"></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.email.errors?.pattern">
+              Verifique Formato do email.
+            </span>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.email.errors?.required">
+              Campo Obrigatório.
+            </span>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label position="floating">Endereço</ion-label>
+              <ion-input type="text" formControlName="logradouro"></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.logradouro.errors?.required">
+              Campo Obrigatorio
+            </span>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-item size="4">
+              <ion-label position="floating">Número</ion-label>
+              <ion-input type="text" formControlName="numero"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item size="8">
+              <ion-label position="floating">Bairro</ion-label>
+              <ion-input type="text" formControlName="bairro"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="4">
+            <ion-item>
+              <ion-label position="floating">CEP</ion-label>
+              <ion-input type="text" formControlName="cep"></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.cep.errors?.required">
+              Campo Obrigatorio
+            </span>
+          </ion-col>
+
+          <ion-col size="3">
+            <ion-item>
+              <ion-label position="floating">Estado</ion-label>
+              <ion-input type="text" formControlName="estado"></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.estado.errors?.required">
+              Campo Obrigatorio
+            </span>
+          </ion-col>
+          <ion-col size="5">
+            <ion-item>
+              <ion-label position="floating">Cidade</ion-label>
+              <ion-input type="text" formControlName="cidade"></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="isSubmitted && errorControl.cidade.errors?.required">
+              Campo Obrigatorio
+            </span>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-button type="submit" color="danger" expand="block">Submit</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
   </div>
 </ion-content>

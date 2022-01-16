@@ -28,7 +28,9 @@ export const environment = {
     { name: 'española', code: 'es' },
     { name: 'عربى', code: 'ar' },
     { name: '中文', code: 'cn' }
-  ], mapOptions: {
+  ], 
+  apiUrl: "https://appjetport.uc.r.appspot.com",
+  mapOptions: {
     zoom: 12,
     mapTypeControl: false,
     zoomControl: false,

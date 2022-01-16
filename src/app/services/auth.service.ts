@@ -75,12 +75,21 @@ export class AuthService {
 
     // create or update passenger
     this.db.object('passengers/' + user.uid).update({
-      name: name,
-      photoURL: photoUrl,
+      name: user.nome,
+      sobrenome: user.sobrenome, 
       email: user.email,
       phoneNumber: user.phoneNumber ? user.phoneNumber : '',
       isPhoneVerified: user.isPhoneVerified,
-      createdAt: Date.now()
+      updatedAt: Date.now(),
+      cpf: user.cpf, 
+      dtNasc: user.dtNasc,
+      ddd: user.ddd, 
+      logradouro: user.logradouro, 
+      numero: user.numero, 
+      cep: user.cep, 
+      estado: user.estado, 
+      cidade: user.cidade 
+
     })
   }
 

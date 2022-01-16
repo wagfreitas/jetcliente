@@ -83,7 +83,6 @@ export class AppComponent implements OnInit {
           if (authData != null) {
 
             this.authService.getUser(authData.uid).valueChanges().subscribe(user => {
-              console.log(user);
               this.user = user
             });
 
