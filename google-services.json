@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1012648687100",
+    "firebase_url": "https://appjetport-default-rtdb.firebaseio.com",
+    "project_id": "appjetport",
+    "storage_bucket": "appjetport.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012648687100:android:6cac0db801da92edadee79",
+        "android_client_info": {
+          "package_name": "com.condsolution.jetcliente"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012648687100-h35n6ivhq54nk107h7se8uqb8e20bd18.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj2R8dacNBH9wBnG--Ex-tpBCDqyyBId4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012648687100-h35n6ivhq54nk107h7se8uqb8e20bd18.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012648687100:android:290f7ff680b055d8adee79",
+        "android_client_info": {
+          "package_name": "com.condsolution.jetporttecnico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012648687100-h35n6ivhq54nk107h7se8uqb8e20bd18.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj2R8dacNBH9wBnG--Ex-tpBCDqyyBId4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012648687100-h35n6ivhq54nk107h7se8uqb8e20bd18.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

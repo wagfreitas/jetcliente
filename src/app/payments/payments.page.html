@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Pagamentos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="ionicForm" (ngSubmit)="submitForm(ionicForm.value)" novalidate>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3">
+            <ion-label position="floating">Valor</ion-label>
+            <ion-input type="float" formControlName="valor"> </ion-input>
+        </ion-col>
+        <ion-col size="9">
+            <ion-label position="floating">Numero Cartão</ion-label>
+            <ion-input (ionInput)="buscaBandeira()" formControlName="numCard" type="text">
+              <ion-img position="fixed" class="'vehicle-img'" src={{thumbnail}}></ion-img>
+            </ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-4>
+            <ion-label position="floating">Ano Val. </ion-label>
+            <!-- 3 input tags suppose to show in the same line -->
+            <ion-input formControlName="anoValCard" maxlength="4" placeholder="ANO" type="number"></ion-input>
+        </ion-col>
+        <ion-col col-4>
+          <ion-label position="floating">Mês Val.</ion-label>
+          <ion-input formControlName="mesValCard" maxlength="2" placeholder="MES" type="number"></ion-input>
+        </ion-col>
+        <ion-col col-4>
+          <ion-label position="floating">Cod Seg. </ion-label>
+          <ion-input formControlName="codSegCard" maxlengh="3" placeholder="COD" type="number"></ion-input>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-12>
+        <ion-label>Parcelas</ion-label>
+        <ion-select formControlName="parcelas" value="brown" ok-text="OK" cancel-text="Fechar">
+          <ion-select-option *ngFor="let p of parcelas"
+            [value]="[{ quantity: p['quantity'], installmentAmount: p['installmentAmount'] }]">
+            {{ p['quantity'] + "X " + p['installmentAmount'] }}</ion-select-option>
+        </ion-select>
+        </ion-col>
+      </ion-row>
+
+
+      <ion-row>
+        <ion-col>
+          <ion-button type="submit" color="danger" expand="block">Realizar Pagamento</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+
+</ion-content>
+<script type="text/javascript"
+  src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>
