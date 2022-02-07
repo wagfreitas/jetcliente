@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   // register new account
-  register(email, password, name, phoneNumber) {
+  register(email, password, name, phoneNumber, ddd) {
     return Observable.create(observer => {
       this.afAuth.createUserWithEmailAndPassword(email, password).then((authData) => {
 
@@ -45,6 +45,7 @@ export class AuthService {
           uid: authData.user.uid,
           name: name,
           phoneNumber: phoneNumber,
+          ddd:ddd,
           isPhoneVerified: false,
           email: email,
           createdAt: Date.now()
@@ -77,6 +78,13 @@ export class AuthService {
       name: name,
       photoURL: photoUrl,
       email: user.email,
+      ddd: user.ddd, 
+      nascimento: user.nascimento ? user.nascimento : '', 
+      endereco: user.endereco ? user.endereco : '', 
+      bairro: user.bairro ? user.bairro : '', 
+      cidade: user.cidade ? user.cidade : '',
+      estado: user.estado ? user.estado : '', 
+      cep: user.cep ? user.cep : '', 
       phoneNumber: user.phoneNumber ? user.phoneNumber : '',
       isPhoneVerified: user.isPhoneVerified,
       createdAt: Date.now()

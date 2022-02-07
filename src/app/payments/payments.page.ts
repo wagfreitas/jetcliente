@@ -105,6 +105,7 @@ export class PaymentsPage implements OnInit {
       anoValCard: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]+$')]],
       codSegCard: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]+$')]],
       parcelas: ['', [Validators.required]],
+      cnpj: ['', [Validators.required]],
       valor: ['', [Validators.required]],
     });
 
@@ -123,7 +124,7 @@ export class PaymentsPage implements OnInit {
     this.authService.getUserData().then(user => {
       this.authService.getUser(user.uid).snapshotChanges().pipe(take(1)).subscribe((snapshot: any) => {
         this.user = { uid: snapshot.key, ...snapshot.payload.val() };
-        console.log(this.user);
+       
       });
     })
      this.pagseg.obterIdSession(this.credenciais).subscribe(res => {
@@ -163,7 +164,7 @@ export class PaymentsPage implements OnInit {
   }
 
   buscaBandeira() {
-   
+   console.log("aqui")
     const numCard = this.ionicForm.value.numCard;
     PagSeguroDirectPayment.setSessionId(this.sessionId);
     PagSeguroDirectPayment.getBrand({
@@ -240,7 +241,7 @@ export class PaymentsPage implements OnInit {
                 sender: {
                     hash: this.dados.hashComprador,
                     name: this.dados.nome + '' + this.dados.sobrenome, /// tem que ter nome e sobrenome
-                    email: 'teste@sandbox.pagseguro.com.br', //email do pagador  
+                    email: this.dados.email, //email do pagador  
                     phone: {
                         areaCode: this.dados.ddd,
                         number: this.dados.telefone
@@ -248,7 +249,7 @@ export class PaymentsPage implements OnInit {
                     documents: {
                         document: {
                             type: 'CPF',
-                            value: this.dados.cpf,
+                            value: this.ionicForm.value.cpf,
                         }
                     }
                 },
@@ -279,7 +280,7 @@ export class PaymentsPage implements OnInit {
                         documents: {
                             document: {
                                 type: 'CPF',
-                                value: this.dados.cpf
+                                value: this.ionicForm.value.numCard
                             }
                         },
                         birthDate: this.dados.nascimento,
@@ -325,15 +326,8 @@ export class PaymentsPage implements OnInit {
       this.common.showToast("Verifique se todos os campos obrigatórios estão preenchidos, inclusive Parcelas");
       return false;
     } else {
-      console.log("vamos para o pagamento", this.user.dtNasc)
+      console.log("vamos para o pagamento")
 
-      const nascimento = this.user.dtNasc
-      const ano = nascimento.substring(0, 4);
-      const mes = nascimento.substring(5, 7)
-      const dia = nascimento.substring(8, 10)
-      const dtnasc = dia + "/" + mes + "/" + ano;
-
-      console.log("dtnasc",dtnasc)
 
       this.dados.codSegCard = value.codSegCard;
       this.dados.mesValidadeCard = value.mesValCard;
@@ -342,7 +336,7 @@ export class PaymentsPage implements OnInit {
       this.dados.numCard = value.numCard;
       
       this.dados.telefone = this.user.phoneNumber;
-      this.dados.cpf = this.user.cpf;
+      this.dados.cpf = value.cpf;
       this.dados.nome = this.user.name;
       this.dados.logradouro = this.user.logradouro;
       this.dados.numero = this.user.numero;
@@ -351,7 +345,7 @@ export class PaymentsPage implements OnInit {
       this.dados.bairro = this.user.bairro;
       this.dados.cep = this.user.cep;
       this.dados.email = this.user.email;
-      this.dados.nascimento = dtnasc;
+      this.dados.nascimento = this.user.nascimento;
       this.dados.ddd =this.user.ddd; 
       this.dados.sobrenome = this.user.sobrenome; 
 

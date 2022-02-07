@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { environment } from 'src/environments/environment.prod';
 import { SettingService } from '../services/setting.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,20 @@ export class RegisterPage implements OnInit {
   password: string = "";
   name: string = "";
   phoneNumber: string = "";
-  settings: any = {};
+  ddd: string = ""; 
+  nascimento: string = "";
+  numero: string = "";
+  cidade: string = "";
+  estado: string = "";
+  bairro: string = "";
+
+
+
+
+  settings: any = {
+    riderTermsURL: "http://www.jetport.com.br/jetport/politica-de-privacidade",
+    riderPrivacyURL: "http://www.jetport.com.br/jetport/politica-de-privacidade"
+  };
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -45,13 +59,13 @@ export class RegisterPage implements OnInit {
 
 
   signup() {
-    if (this.email.length == 0 || this.password.length == 0 || this.name.length == 0 || this.phoneNumber.length == 0) {
-      this.commonService.showToast("Invalid Credentials");
+    if (this.email.length == 0 || this.password.length == 0 || this.name.length == 0 || this.phoneNumber.length == 0 || this.ddd.length == 0 ) {
+      this.commonService.showToast("Preencha os valores corretamente");
     }
     else {
       this.commonService.showLoader();
       let email = (this.email).toLowerCase().trim();
-      this.authService.register(email, this.password, this.name, this.phoneNumber).subscribe(authData => {
+      this.authService.register(email, this.password, this.name, this.phoneNumber, this.ddd).subscribe(authData => {
         this.commonService.hideLoader();
         localStorage.setItem('isLoggedIn', 'true');
         this.router.navigateByUrl('/home', { skipLocationChange: true, replaceUrl: true });
