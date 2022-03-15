@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Configuraçóes</ion-title>
+    <ion-title>Configurações</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -24,7 +24,7 @@
       <ion-icon slot="start" name="notifications"></ion-icon>
       <ion-label>
         <h3>Receber Notificaçôes?</h3>
-        <p>{{'PUSH_NOTIFICATION_TEXT' | translate}}</p>
+        <p>Habilitar / Desabilitar</p>
       </ion-label>
       <ion-toggle slot="end" (click)="change()" [(ngModel)]="user.isPushEnabled"></ion-toggle>
     </ion-item>

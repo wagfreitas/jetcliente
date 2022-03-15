@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
       icon: 'home'
     },
     {
-      title: 'Meus Chamados',
+      title: 'Chamados',
       url: '/history',
       icon: 'time'
     },
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
       icon: 'settings'
     },
     {
-      title: 'Cadastro',
+      title: 'Perfil',
       url: '/profile',
       icon: 'person'
     },

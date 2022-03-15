@@ -24,6 +24,7 @@ export class RegisterPage implements OnInit {
   cidade: string = "";
   estado: string = "";
   bairro: string = "";
+  complemento: string = "";
 
 
 

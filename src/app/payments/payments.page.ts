@@ -105,7 +105,7 @@ export class PaymentsPage implements OnInit {
       anoValCard: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]+$')]],
       codSegCard: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]+$')]],
       parcelas: ['', [Validators.required]],
-      cnpj: ['', [Validators.required]],
+      cpf: ['', [Validators.required]],
       valor: ['', [Validators.required]],
     });
 
@@ -132,6 +132,7 @@ export class PaymentsPage implements OnInit {
        this.pagseg.carregaPagSeguroDirectPayment(this.credenciais).then(() => {
              PagSeguroDirectPayment.setSessionId(this.sessionId);
              this.credenciais.sessionId = this.sessionId;
+           
            });
 
      });
@@ -240,7 +241,7 @@ export class PaymentsPage implements OnInit {
                 method: 'creditCard',
                 sender: {
                     hash: this.dados.hashComprador,
-                    name: this.dados.nome + '' + this.dados.sobrenome, /// tem que ter nome e sobrenome
+                    name: this.dados.nome, /// tem que ter nome e sobrenome
                     email: this.dados.email, //email do pagador  
                     phone: {
                         areaCode: this.dados.ddd,
@@ -276,11 +277,11 @@ export class PaymentsPage implements OnInit {
                         noInterestInstallmentQuantity: 16
                     },
                     holder: {
-                        name: this.dados.nome + '' + this.dados.sobrenome,
+                        name: this.dados.nome,
                         documents: {
                             document: {
                                 type: 'CPF',
-                                value: this.ionicForm.value.numCard
+                                value: this.ionicForm.value.cpf
                             }
                         },
                         birthDate: this.dados.nascimento,
@@ -306,9 +307,10 @@ export class PaymentsPage implements OnInit {
       console.log('body------', pagDados);
   
      this.pagseg.enviarPgto(pagDados).subscribe(res =>{
-       console.log(res)
-       if (res.transaction["code"]) {
+       console.log("mensagem", res.mensagem)
+       if (res.mensagem) {
           this.common.showToast("Pagamento Efetuado com Sucesso");
+          this.thumbnail ='../../assets/icon/card.png';
           this.ionicForm.reset();
        } else{
          this.common.showToast("Ocorreu um erro, verifique os dados");
@@ -338,7 +340,7 @@ export class PaymentsPage implements OnInit {
       this.dados.telefone = this.user.phoneNumber;
       this.dados.cpf = value.cpf;
       this.dados.nome = this.user.name;
-      this.dados.logradouro = this.user.logradouro;
+      this.dados.logradouro = this.user.endereco;
       this.dados.numero = this.user.numero;
       this.dados.cidade =this.user.cidade;
       this.dados.estado = this.user.estado;

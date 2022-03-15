@@ -49,31 +49,33 @@
       </ion-row>
 
       <ion-row>
-        <ion-col size="12">
+        <ion-col size="8">
           <ion-label position="stacked" color="primary">Endereço</ion-label>
           <ion-input type="text" [(ngModel)]="user.endereco"></ion-input>
         </ion-col>
-      </ion-row>
-
-      <ion-row>
         <ion-col size="4">
           <ion-label position="stacked" color="primary">Número</ion-label>
           <ion-input type="text" [(ngModel)]="user.numero"></ion-input>
         </ion-col>
+      </ion-row>
 
-        <ion-col size="8">
+      <ion-row>
+        <ion-col size="6">
+          <ion-label position="stacked" color="primary">Complemento</ion-label>
+          <ion-input type="text" [(ngModel)]="user.complemento"></ion-input>
+        </ion-col>
+        <ion-col size="6">
           <ion-label position="stacked" color="primary">Bairro</ion-label>
           <ion-input type="text" [(ngModel)]="user.bairro"></ion-input>
         </ion-col>
       </ion-row>
 
-
       <ion-row>
-        <ion-col size="3">
+        <ion-col size="4">
           <ion-label position="stacked" color="primary">CEP</ion-label>
           <ion-input type="text" [(ngModel)]="user.cep"></ion-input>
         </ion-col>
-        <ion-col size="6">
+        <ion-col size="5">
           <ion-label position="stacked" color="primary">Cidade</ion-label>
           <ion-input type="text" [(ngModel)]="user.cidade"></ion-input>
         </ion-col>
@@ -86,10 +88,10 @@
 
     </ion-grid>
     <div class="ion-padding">
-      <ion-button color="dark" expand="block" (click)="save()">{{'SAVE' | translate}}</ion-button>
+      <ion-button color="dark" expand="block" (click)="save()">Salvar</ion-button>
       &nbsp;
       &nbsp;
-      <ion-button (click)="logout()" expand="block" fill="clear" color="dark">{{'LOGOUT' | translate}}</ion-button>
+      <ion-button (click)="logout()" expand="block" fill="clear" color="dark">Sair</ion-button>
     </div>
   </div>
 </ion-content>

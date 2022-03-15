@@ -5,7 +5,8 @@
 export const environment = {
   production: true,
   appName: 'jetport',
-  apiUrl: "https://appjetport.uc.r.appspot.com",
+ apiUrl: "https://appjetport.uc.r.appspot.com",
+ //apiUrl: "http://localhost:3333",
   firebase: {
     apiKey: "AIzaSyAyuwOuzS7zEPRGYazFkSg0kkcUdJC3rD0",
     authDomain: "appjetport.firebaseapp.com",

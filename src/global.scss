@@ -52,29 +52,27 @@ ion-item {
 
 .native-input.sc-ion-input-md{
     padding: 0.5rem !important;
-    color: #555;   
+    color: rgb(255, 255, 255);   
 }
 
 ion-menu {
     --width: 240px;
-    --ion-background-color: var(--ion-color-dark);
-    --ion-text-color: var(--ion-color-dark-contrast);
+    --ion-background-color: black;
+    --ion-text-color: white;
 
     ion-toolbar {
-        --background: var(--ion-color-dark);
+        --background: black;
     }
     ion-icon{
-        color:var(--ion-color-dark-contrast);
+        color:white;
     }
 
-    ion-list {/* optional, but it needs when you use gradient as a background color.*/
-        background: transparent;
-    }
+   
 }
 
 .sidemenu-header{
-    background: #333;
-    height: 200px;
+    background: #000000;
+    height: 220px;
     padding-top:60px;
     display: flex;
     align-items: center;

@@ -33,6 +33,7 @@ export class ProfilePage implements OnInit {
 
   // save user info
   save() {
+    console.log(this.user)
     this.authService.updateUserProfile(this.user);
     this.common.showToast("Updated");
   }
