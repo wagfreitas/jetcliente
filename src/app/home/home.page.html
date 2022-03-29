@@ -8,12 +8,13 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
+ 
 <ion-content>
   <div class="locationinput-holder">
-    <input class="locationinput" (click)="chooseOrigin()" placeholder="local do atendimento?" type="text"
-      value="{{origin ? origin.vicinity : '' }}">
-    <!--input class="locationinput" (click)="chooseDestination()" placeholder="Where do you want to drop?" type="text"
-      value="{{ destination ? destination.vicinity : '' }}"-->
+    <!--input class="locationinput" (click)="chooseOrigin()" placeholder="local do atendimento?" type="text"
+      value="{{origin ? origin.vicinity : '' }}"-->
+    <input class="locationinput" (click)="chooseDestination()" placeholder="Qual o local do atendimento:" type="text"
+      value="{{ destination ? destination.vicinity : '' }}">
     <p class="distanceText" [hidden]="!destination">
       <span *ngIf="distanceText!=''">{{ distanceText }}</span>
       <span *ngIf="durationText!=''">&nbsp; {{durationText}}</span>

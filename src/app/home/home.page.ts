@@ -86,7 +86,6 @@ export class HomePage implements OnInit {
       if (authData != null)
         this.authService.getUser(authData.uid).snapshotChanges().subscribe((snap: any) => {
           this.user = { key: snap.key, uid: snap.key, ...snap.payload.val() };
-          //console.log('usuario', this.user);
         })
     });
     this.settingService.getSettings().subscribe(res => res != null ? this.settings = res.payload.val() : this.settings = {});
@@ -122,7 +121,6 @@ export class HomePage implements OnInit {
       }, {
         text: "Seleciona",
         handler: (data) => {
-          console.log(data);
           if (data == 'card') {
             this.authService.getCardSetting(this.user.uid).valueChanges().pipe(take(1)).subscribe((res: any) => {
               if (res != null) {
@@ -230,19 +228,17 @@ export class HomePage implements OnInit {
               this.vehicles.push(obj.vehicles[id]);
             });
 
-            console.log('veiculos', this.vehicles);
-
             // calculate distance between origin adn destination
             if (this.destination) {
 
               directionsService.route(request, (result, status) => {
 
                 if (status == google.maps.DirectionsStatus.OK && result.routes.length != 0) {
-                  console.log(result);
+                  
                   this.distance = result.routes[0].legs[0].distance.value / 1000;
                   this.distanceText = result.routes[0].legs[0].distance.text;
                   this.durationText = result.routes[0].legs[0].duration.text;
-                  console.log(this.distance);
+                
 
                   for (let i = 0; i < this.vehicles.length; i++) {
 
@@ -302,7 +298,6 @@ export class HomePage implements OnInit {
         };
         directionsService.route(request, function (response, status) {
           if (status == google.maps.DirectionsStatus.OK) {
-            console.log(response);
             directionsDisplay.setDirections(response);
             directionsDisplay.setMap(mapx);
           } else {
@@ -549,20 +544,15 @@ export class HomePage implements OnInit {
   // show drivers on map
   showDriverOnMap(locality) {
 
-    console.log("Searching: " + this.currentVehicle.id + " under " + locality);
-
     this.driverService.getActiveDriver(locality, this.currentVehicle.id).valueChanges().pipe(take(1)).subscribe((snapshot: any) => {
 
       // clear vehicles
       this.clearDrivers();
       if (snapshot != null) {
-        console.log(snapshot.length + " Drivers");
         // only show near vehicle
         snapshot.forEach(vehicle => {
 
           let distance = this.placeService.calcCrow(vehicle.lat, vehicle.lng, this.origin.location.lat, this.origin.location.lng);
-
-          console.log("Distancia:" + (distance < SHOW_VEHICLES_WITHIN) + " última atividade:" + (vehicle.last_active < VEHICLE_LAST_ACTIVE_LIMIT));
 
           // checking last active time and distance
           if (distance < SHOW_VEHICLES_WITHIN && Date.now() - vehicle.last_active < VEHICLE_LAST_ACTIVE_LIMIT) {

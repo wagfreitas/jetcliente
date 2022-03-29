@@ -153,7 +153,6 @@ export class PaymentsPage implements OnInit {
            success: (response) => {
         dados.parcelas = response.installments[dados.bandCard];
         this.parcelas = dados.parcelas;
-        this.parcelas["installmentAmount"] = parseFloat(this.parcelas["installmentAmount"]).toFixed(2);
        // console.log('parcelas: ' + JSON.stringify(response.installments[dados.bandCard]));
       },
       error: (response: any) => { console.log('buscaParcelas', response); }
@@ -165,7 +164,6 @@ export class PaymentsPage implements OnInit {
   }
 
   buscaBandeira() {
-   console.log("aqui")
     const numCard = this.ionicForm.value.numCard;
     PagSeguroDirectPayment.setSessionId(this.sessionId);
     PagSeguroDirectPayment.getBrand({

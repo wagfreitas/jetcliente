@@ -92,7 +92,6 @@ export class MapPage implements OnInit {
     geocoder.geocode({ 'latLng': latLng }, (results, status) => {
       if (status == google.maps.GeocoderStatus.OK) {
         this.address = results[0];
-        console.log(this.address);
         this.chRef.detectChanges();
       }
     });
@@ -102,9 +101,9 @@ export class MapPage implements OnInit {
   selectPlace() {
 
     let address = this.placeService.formatAddress(this.address);
-    console.log(address);
-
+   
     this.route.queryParams.subscribe(data => {
+      console.log("data",data)
       let type = data.type
       if (type == 'origin') {
         this.tripService.setOrigin(address.vicinity, address.location.lat, address.location.lng);
