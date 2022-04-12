@@ -11,10 +11,11 @@
  
 <ion-content>
   <div class="locationinput-holder">
-    <!--input class="locationinput" (click)="chooseOrigin()" placeholder="local do atendimento?" type="text"
-      value="{{origin ? origin.vicinity : '' }}"-->
-    <input class="locationinput" (click)="chooseDestination()" placeholder="Qual o local do atendimento:" type="text"
-      value="{{ destination ? destination.vicinity : '' }}">
+    <ion-label position="stacked">Local Atendimento</ion-label>
+    <input class="locationinput" (click)="chooseOrigin()" placeholder="local do atendimento?" type="text"
+      value="{{origin ? origin.vicinity : '' }}">
+    <!--put class="locationinput" (click)="chooseDestination()" placeholder="Qual o local do atendimento:" type="text"
+      value="{{ destination ? destination.vicinity : '' }}"-->
     <p class="distanceText" [hidden]="!destination">
       <span *ngIf="distanceText!=''">{{ distanceText }}</span>
       <span *ngIf="durationText!=''">&nbsp; {{durationText}}</span>
@@ -56,7 +57,7 @@
     <ion-button expand="block" color="dark" [hidden]="origin" (click)="chooseDestination()">
      Acionar Técnico</ion-button>
     <ion-button expand="block" color="dark" [hidden]="!origin" (click)="book()">
-      {{ locateDriver == false ? 'Acionar Técnico':'Localizando Técnico'}} <ion-spinner name="dots" color="light"
+      {{ locateDriver == false ? 'Chamar Técnico':'Localizando Técnico'}} <ion-spinner name="dots" color="light"
         [hidden]="!locateDriver"></ion-spinner>
     </ion-button>
   </ion-toolbar>

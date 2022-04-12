@@ -10,9 +10,9 @@ export class PlaceService {
   constructor() {
   }
 
-  //This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
+  //This function takes in latitude and longitude of two location and returns the distance between them as the crow flies  ---linha reta (in km)
   calcCrow(lat1, lon1, lat2, lon2) {
-    let R = 6371; // km
+    let R = 6371; //Radius of the earth in km
     let dLat = this.toRad(lat2 - lat1);
     let dLon = this.toRad(lon2 - lon1);
     lat1 = this.toRad(lat1);
@@ -37,7 +37,6 @@ export class PlaceService {
    * @returns {{location: {lat: any, lng: any}, vicinity: string}}
    */
   formatAddress(address) {
-    console.log(address);
     let components = address.address_components;
     let vicinity = address.formatted_address;
     // let vicinity = components[0].short_name + ', ' + components[1].short_name;

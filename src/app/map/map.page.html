@@ -5,7 +5,7 @@
     </ion-buttons>
     <input class="locationinput" type="text" id="searchbar" #searchbar placeholder="Digite um endereço ou clique no mapa"
       autofocus />
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="address">
       <ion-button (click)="selectPlace()">IR</ion-button>
     </ion-buttons>
   </ion-toolbar>

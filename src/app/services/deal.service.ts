@@ -19,26 +19,16 @@ export class DealService {
   }
 
   // make deal to driver
-  makeDeal(userId, driverId, origin, destination, distance, fee, currency, note, paymentMethod, promocode, discount, tax, fee_taxed, rawfee, commission_type, commission_value, commission) {
+  makeDeal(userId, driverId, origin, destination, distance, currency,  paymentMethod) {
     return this.db.object('deals/' + driverId).set({
       passengerId: userId,
       currency: currency,
       origin: origin,
       destination: destination,
       distance: distance,
-      fee: fee,
-      note: note,
       paymentMethod: paymentMethod,
       status: DEAL_STATUS_PENDING,
-      createdAt: Date.now(),
-      promocode: promocode,
-      discount: discount,
-      tax: tax,
-      fee_taxed: fee_taxed,
-      rawfee: rawfee,
-      commission_type: commission_type,
-      commission_value: commission_value,
-      commission: commission
+      createdAt: Date.now()
     });
   }
 

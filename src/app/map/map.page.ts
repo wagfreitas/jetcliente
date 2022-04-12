@@ -103,9 +103,9 @@ export class MapPage implements OnInit {
     let address = this.placeService.formatAddress(this.address);
    
     this.route.queryParams.subscribe(data => {
-      console.log("data",data)
       let type = data.type
       if (type == 'origin') {
+
         this.tripService.setOrigin(address.vicinity, address.location.lat, address.location.lng);
       } else if (type == 'destination') {
         this.tripService.setDestination(address.vicinity, address.location.lat, address.location.lng);

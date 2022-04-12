@@ -183,7 +183,6 @@ export class TripService {
   }
 
   setAvailableDrivers(vehicles) {
-    console.log(vehicles);
     this.availableDrivers = vehicles;
   }
 

@@ -42,22 +42,25 @@
       </ion-row>
 
       <ion-row>
-        <ion-col size="8">
+        <ion-col size="12">
           <ion-label position="stacked" color="primary">Endereço</ion-label>
           <ion-input type="text" [(ngModel)]="user.endereco"></ion-input>
         </ion-col>
+      </ion-row>
+    
+      <ion-row>
         <ion-col size="4">
           <ion-label position="stacked" color="primary">Número</ion-label>
           <ion-input type="text" [(ngModel)]="user.numero"></ion-input>
         </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="6">
+    
+        <ion-col size="8">
           <ion-label position="stacked" color="primary">Complemento</ion-label>
           <ion-input type="text" [(ngModel)]="user.complemento"></ion-input>
         </ion-col>
-        <ion-col size="6">
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
           <ion-label position="stacked" color="primary">Bairro</ion-label>
           <ion-input type="text" [(ngModel)]="user.bairro"></ion-input>
         </ion-col>
