@@ -19,12 +19,11 @@ export class DealService {
   }
 
   // make deal to driver
-  makeDeal(userId, driverId, origin, destination, distance, currency,  paymentMethod) {
+  makeDeal(userId, driverId, origin, distance, currency,  paymentMethod) {
     return this.db.object('deals/' + driverId).set({
       passengerId: userId,
       currency: currency,
       origin: origin,
-      destination: destination,
       distance: distance,
       paymentMethod: paymentMethod,
       status: DEAL_STATUS_PENDING,

@@ -16,6 +16,8 @@ import { CommonService } from '../services/common.service';
 import * as firebase from 'firebase';
 import { AngularFireDatabase } from '@angular/fire/database';
 
+
+
 declare var google: any;
 declare var Stripe: any;
 
@@ -82,17 +84,21 @@ export class HomePage implements OnInit {
 
   ionViewDidEnter() {
     this.menuCtrl.enable(true);
+    //PEGA OS DADOS DO CLIENTE QUE ESTA LOGADO
     this.afAuth.authState.subscribe(authData => {
       if (authData != null)
         this.authService.getUser(authData.uid).snapshotChanges().subscribe((snap: any) => {
           this.user = { key: snap.key, uid: snap.key, ...snap.payload.val() };
-
         })
     });
+
+    //PEGA ALGUNS DADOS DE CONFIGURAÇAO DO SISTEMA COMO TIPO DE MOEDA, ALGUMAS URLS, FONE DE EMERGENCIA, ETC....
     this.settingService.getSettings().subscribe(res => res != null ? this.settings = res.payload.val() : this.settings = {});
 
+    // FAZ UM GET NA ORIGEM QUE POR VENTURA JA TENHA SIDO SETADA
     this.origin = this.tripService.getOrigin();
-    this.destination = this.tripService.getDestination();
+ 
+    //CARREGA O MAPA
     this.loadMap();
   }
 
@@ -100,6 +106,7 @@ export class HomePage implements OnInit {
     // console.log("calling");
   }
 
+  // QUANDO SAI DA APLICAÇAO PRA DE FAZER O TRACKING
   ionViewDidLeave() {
     clearInterval(this.driverTracking);
   }
@@ -110,50 +117,6 @@ export class HomePage implements OnInit {
     return this.paymentMethod;
   }
 
-  // choosePaymentMethod1() {
-  //   this.alertCtrl.create({
-  //     header: "Selecione a forma de pagamento",
-  //     inputs: [
-  //       { type: 'radio', label: "Card", value: 'card' }
-  //     ],
-  //     buttons: [{
-  //       text: "Cancela"
-  //     }, {
-  //       text: "Seleciona",
-  //       handler: (data) => {
-  //         if (data == 'card') {
-  //           this.authService.getCardSetting(this.user.uid).valueChanges().pipe(take(1)).subscribe((res: any) => {
-  //             if (res != null) {
-  //               this.tripService.setPaymentMethod(data);
-  //               this.paymentMethod = data;
-
-  //               const exp = res.exp.split('/');
-  //               Stripe.card.createToken({
-  //                 number: res.number,
-  //                 exp_month: exp[0],
-  //                 exp_year: exp[1],
-  //                 cvc: res.cvv
-  //               }, (status: number, response: any) => {
-  //                 if (status == 200) {
-  //                   console.log("Card Ready")
-  //                   this.authService.updateCardSetting(res.number, res.exp, res.cvv, response.id, this.user.uid);
-  //                 } else {
-  //                   this.common.showToast(response.error.message);
-  //                 }
-  //               });
-  //             }
-  //             else
-  //               this.common.showAlert("Cartão Inválido")
-  //           })
-  //         }
-  //         else if (data == 'cash') {
-  //           this.paymentMethod = data;
-  //           this.tripService.setPaymentMethod(data);
-  //         }
-  //       }
-  //     }]
-  //   }).then(res => res.present());
-  // }
 
   // toggle active vehicle
   chooseVehicle(index) {
@@ -163,6 +126,7 @@ export class HomePage implements OnInit {
       if (i == index) {
         this.tripService.setVehicle(this.vehicles[i]);
         this.currentVehicle = this.vehicles[i];
+        console.log(this.currentVehicle.distance)
       }
     }
     // start tracking new driver type
@@ -171,10 +135,12 @@ export class HomePage implements OnInit {
   }
 
   loadMap() {
+
     // this.common.showLoader("Loading..");
 
     // busca a localização corrente do cliente
     return this.geolocation.getCurrentPosition().then((resp) => {
+      // se um origem for determinada ele a usa como referencia, caso contrario ele usa a localizaçao atual do cliente
       if (this.origin) this.startLatLng = new google.maps.LatLng(this.origin.location.lat, this.origin.location.lng);
       else this.startLatLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
 
@@ -186,16 +152,18 @@ export class HomePage implements OnInit {
         }
       });
 
+      //aqui é criado alguns parametros para o mapa, como o ponto central do icone da posiçao inicial e o tipo do mapa no caso Roadmap
       var mapOptions: any = environment.mapOptions;
       mapOptions.center = this.startLatLng;
       mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
 
+      // atribuimos ao mapa esses parametros
       this.map = new google.maps.Map(document.getElementById(this.mapId), mapOptions);
 
       let mapx = this.map;
       directionsDisplay.setMap(mapx);
 
-      // encontra o endereço no mapa
+      //determina uma origem caso nao exista uma e seta esse valor para o Set do Origin
       let geocoder = new google.maps.Geocoder();
       geocoder.geocode({ 'latLng': this.map.getCenter() }, (results, status) => {
         if (status == google.maps.GeocoderStatus.OK) {
@@ -211,8 +179,13 @@ export class HomePage implements OnInit {
 
           // salva a cidade
           let locality = this.placeService.setLocalityFromGeocoder(results);
-          // carrega a lista de  veiculos por cidades
+
+          // carrega a lista de  veiculos por cidades, isso para quando tiver mais uma cidade cadastrada no sistema a aplicaçao 
+          // ira carregar somente os veiculos da cidade que o usuario estiver chamando. Caso nao existam outras cidades cadastradas
+          // ele ira carregar uma default 
+
           this.settingService.getPrices().valueChanges().subscribe((snapshot: any) => {
+           
             this.vehicles = [];
             let obj = snapshot[locality] ? snapshot[locality] : snapshot.default;
             this.currency = this.settings.currency;
@@ -222,104 +195,34 @@ export class HomePage implements OnInit {
               this.vehicles.push(obj.vehicles[id]);
             });
 
-            // set first device as default
+
+            // pega os dados do tipo de veiculo, TALVEZ NAO VAMOS USAR ESSA INFORMAÇAO 
             this.vehicles[0].active = true;
             this.currentVehicle = this.vehicles[0];
 
+            
+            // ATRIBUI O LOCALITY PARA A VARIAVEL GLOBAL THIS.LOCALITY
             this.locality = locality;
+
+            // se o tracking do motorista estiver habilitado... ele avisa 
             if (this.isTrackDriverEnabled)
               this.trackDrivers();
           });
         }
       });
 
-      // add destination to map
-      if (this.destination) {
-        this.destLatLng = new google.maps.LatLng(this.destination.location.lat, this.destination.location.lng);
-        var bounds = new google.maps.LatLngBounds(); // limites
-        bounds.extend(this.startLatLng);
-        bounds.extend(this.destLatLng);
-
-        mapx.fitBounds(bounds);
-        var request = {
-          origin: this.startLatLng,
-          destination: this.destLatLng,
-          travelMode: google.maps.TravelMode.DRIVING
-        };
-        directionsService.route(request, function (response, status) {
-          if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(response);
-            directionsDisplay.setMap(mapx);
-          } else {
-            console.log("error");
-          }
-        });
-      }
+               
       // this.common.hideLoader();
     }).catch((error) => {
       // this.common.hideLoader();
       console.log('Error getting location', error);
     });
   }
+
   
-  showPromoPopup() {
-    this.alertCtrl.create({
-      header: 'Enter Promo code',
-      inputs: [
-        { name: 'promocode', placeholder: 'Enter Promo Code', value: this.promocode }
-      ],
-      buttons: [
-        { text: 'Cancel' },
-        {
-          text: 'Apply',
-          handler: (data) => {
-            console.log(data.promocode);
-            // verifying promocode
-            let code = (data.promocode).toUpperCase();
-            this.db.list("promocodes", ref => ref.orderByChild("code").equalTo(code)).snapshotChanges().pipe(take(1)).subscribe((promocodes) => {
-              console.log(promocodes);
-              if (promocodes.length > 0) {
-                let promo: any = promocodes[0].payload.val();
-                this.promocode = promo.code;
-                this.discount = promo.discount;
-                this.tripService.setPromo(promo.code);
-                this.tripService.setDiscount(promo.discount);
-                this.common.showToast(promo.code + " Applied with " + promo.discount + "% discount");
-              }
-              else {
-                this.common.showToast("Invalid Promocode");
-              }
-            });
-          }
-        }
-      ]
-    }).then(prompt => prompt.present());
-
-  }
 
 
-  // Show note popup when click to 'Notes to user'
-  showNotePopup() {
-    this.alertCtrl.create({
-      header: 'Dicas para o Técnico',
-      message: "",
-      inputs: [
-        { name: 'note', placeholder: 'Dicas' },
-      ],
-      buttons: [
-        { text: 'Cancela' },
-        {
-          text: 'Salva',
-          handler: data => {
-            this.note = data;
-            this.tripService.setNote(data);
-            console.log('Saved clicked');
-          }
-        }
-      ]
-    }).then(prompt => prompt.present());
-
-  };
+ 
 
   // go to next view when the 'Book' button is clicked
   book() {
@@ -329,17 +232,17 @@ export class HomePage implements OnInit {
 
     // guarda detalhes do técnico
     this.tripService.setAvailableDrivers(this.activeDrivers);
-    this.tripService.setDistance(this.distance);
-    this.tripService.setFee(this.currentVehicle.fee);
-    this.tripService.setRawFee(this.currentVehicle.fee);
-    this.tripService.setFeeTaxed(this.currentVehicle.fee_taxed);
+   // this.tripService.setDistance(this.distance);
+   // this.tripService.setFee(this.currentVehicle.fee);
+   // this.tripService.setRawFee(this.currentVehicle.fee);
+   // this.tripService.setFeeTaxed(this.currentVehicle.fee_taxed);
     this.tripService.setIcon(this.currentVehicle.icon);
-    this.tripService.setNote(this.note);
-    this.tripService.setPromo(this.promocode);
-    this.tripService.setDiscount(this.discount);
+   // this.tripService.setNote(this.note);
+   // this.tripService.setPromo(this.promocode);
+   // this.tripService.setDiscount(this.discount);
     this.tripService.setTax(this.currentVehicle.tax);
-    this.tripService.setCommissionType(this.currentVehicle.commission_type)
-    this.tripService.setCommissionValue(this.currentVehicle.commission_value)
+   // this.tripService.setCommissionType(this.currentVehicle.commission_type)
+   // this.tripService.setCommissionValue(this.currentVehicle.commission_value)
     this.tripService.setCommission(this.currentVehicle.commission)
     // this.tripService.setPaymentMethod('');
     this.drivers = this.tripService.getAvailableDrivers();
@@ -350,17 +253,6 @@ export class HomePage implements OnInit {
 
     //aplica desconto
 
-    if (this.tripService.getDiscount() != 0) {
-
-
-      let feeAfterDiscount = this.tripService.getFee() - (this.tripService.getFee() * this.tripService.getDiscount() / 100);
-      this.tripService.setFee(parseFloat(feeAfterDiscount.toFixed(2)));
-
-      let feeTaxedAfterDiscount = feeAfterDiscount + (feeAfterDiscount * (this.tripService.getTax() / 100))
-
-      this.tripService.setFeeTaxed(parseFloat(feeTaxedAfterDiscount.toFixed(2)));
-
-    }
 
 
     if (this.drivers) {
@@ -371,17 +263,16 @@ export class HomePage implements OnInit {
 
   makeDeal(index) {
     let driver = this.drivers[index];
-    console.log(driver)
     let dealAccepted = false;
+
+      console.log(driver)
 
     if (driver) {
       driver.status = 'Bidding';
       this.dealService.getDriverDeal(driver.key).valueChanges().pipe(take(1)).subscribe((snapshot: any) => {
         // if user is available
-        console.log(snapshot);
         if (snapshot == null) {
           // create a record
-          console.log(snapshot);
           console.log(this.user);
 
           this.dealService.makeDeal(
@@ -389,7 +280,6 @@ export class HomePage implements OnInit {
             driver.key,
             this.tripService.getOrigin(),
             this.tripService.getDistance(),
-            this.tripService.getFee(),
             this.tripService.getCurrency(),
             this.tripService.getPaymentMethod(),
           ).then(() => {
@@ -481,10 +371,13 @@ export class HomePage implements OnInit {
       this.showDriverOnMap(this.locality);
     }, POSITION_INTERVAL);
   }
+
   // show drivers on map
   showDriverOnMap(locality) {
 
     this.driverService.getActiveDriver(locality, this.currentVehicle.id).valueChanges().pipe(take(1)).subscribe((snapshot: any) => {
+
+      console.log(snapshot)
       // clear vehicles
       this.clearDrivers();
       if (snapshot != null) {
@@ -496,7 +389,7 @@ export class HomePage implements OnInit {
           let distance = this.placeService.calcCrow(vehicle.lat, vehicle.lng, this.origin.location.lat, this.origin.location.lng);
 
           // se a distancia for menor que o previsto ele sera adicionado ao mapa 
-          if (distance < SHOW_VEHICLES_WITHIN ) {
+          if (distance < SHOW_VEHICLES_WITHIN) {
             //&& Date.now() - vehicle.last_active < VEHICLE_LAST_ACTIVE_LIMIT
             // create or update
             let latLng = new google.maps.LatLng(vehicle.lat, vehicle.lng);
