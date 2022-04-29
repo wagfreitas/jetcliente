@@ -118,22 +118,6 @@ export class HomePage implements OnInit {
   }
 
 
-  // toggle active vehicle
-  chooseVehicle(index) {
-    for (var i = 0; i < this.vehicles.length; i++) {
-      this.vehicles[i].active = (i == index);
-      // choose this vehicle type
-      if (i == index) {
-        this.tripService.setVehicle(this.vehicles[i]);
-        this.currentVehicle = this.vehicles[i];
-        console.log(this.currentVehicle.distance)
-      }
-    }
-    // start tracking new driver type
-    this.trackDrivers();
-    this.toggleVehicles();
-  }
-
   loadMap() {
 
     // this.common.showLoader("Loading..");
@@ -219,27 +203,18 @@ export class HomePage implements OnInit {
     });
   }
 
-  
-
-
- 
 
   // go to next view when the 'Book' button is clicked
   book() {
-
     this.locateDriver = true;
-
 
     // guarda detalhes do técnico
     this.tripService.setAvailableDrivers(this.activeDrivers);
    // this.tripService.setDistance(this.distance);
-   // this.tripService.setFee(this.currentVehicle.fee);
+    this.tripService.setFee(this.currentVehicle.fee);
    // this.tripService.setRawFee(this.currentVehicle.fee);
    // this.tripService.setFeeTaxed(this.currentVehicle.fee_taxed);
     this.tripService.setIcon(this.currentVehicle.icon);
-   // this.tripService.setNote(this.note);
-   // this.tripService.setPromo(this.promocode);
-   // this.tripService.setDiscount(this.discount);
     this.tripService.setTax(this.currentVehicle.tax);
    // this.tripService.setCommissionType(this.currentVehicle.commission_type)
    // this.tripService.setCommissionValue(this.currentVehicle.commission_value)
@@ -263,9 +238,10 @@ export class HomePage implements OnInit {
 
   makeDeal(index) {
     let driver = this.drivers[index];
+    this.distance = driver.distance
     let dealAccepted = false;
 
-      console.log(driver)
+      console.log(driver.distance)
 
     if (driver) {
       driver.status = 'Bidding';
@@ -279,7 +255,7 @@ export class HomePage implements OnInit {
             this.user.uid,
             driver.key,
             this.tripService.getOrigin(),
-            this.tripService.getDistance(),
+            this.distance,
             this.tripService.getCurrency(),
             this.tripService.getPaymentMethod(),
           ).then(() => {
@@ -376,15 +352,11 @@ export class HomePage implements OnInit {
   showDriverOnMap(locality) {
 
     this.driverService.getActiveDriver(locality, this.currentVehicle.id).valueChanges().pipe(take(1)).subscribe((snapshot: any) => {
-
-      console.log(snapshot)
       // clear vehicles
       this.clearDrivers();
       if (snapshot != null) {
         // only show near vehicle
         snapshot.forEach(vehicle => {
-
-
           //calcula a distancia entre o solicitante e o tecnico
           let distance = this.placeService.calcCrow(vehicle.lat, vehicle.lng, this.origin.location.lat, this.origin.location.lng);
 

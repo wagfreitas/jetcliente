@@ -39,7 +39,7 @@ export class MapPage implements OnInit {
 
   // Load map only after view is initialized
   ionViewDidEnter() {
-    this.loadMap();
+   this.loadMap();
   }
 
   loadMap() {
@@ -59,7 +59,7 @@ export class MapPage implements OnInit {
       this.marker.setMap(this.map);
 
       // get center's address
-      this.findPlace(latLng);
+     // this.findPlace(latLng);
 
       this.map.addListener('center_changed', (event) => {
         let center = this.map.getCenter();

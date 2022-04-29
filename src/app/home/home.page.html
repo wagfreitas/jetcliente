@@ -26,34 +26,6 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar style="padding: 8px;">
-    <ion-row [hidden]="!destination" style="background: #f5f5f5;">
-      <ion-col>
-        <ion-button fill="clear" size="small" color="dark" expand="block" (click)="choosePaymentMethod1()">
-          <ion-icon slot="start" name="{{ getPaymentMethod() }}"></ion-icon>
-          {{ getPaymentMethod() }}
-        </ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button fill="clear" size="small" color="dark" expand="block" (click)="showPromoPopup()">
-          <ion-icon slot="start" name="create"></ion-icon>
-          {{'PROMO' | translate}}
-        </ion-button>
-      </ion-col>
-    </ion-row>
-
-    <ion-row [hidden]="!destination">
-
-      <ion-col *ngFor="let vehicle of vehicles; let i = index" [ngClass]="{'active': vehicle.active}"
-        (click)="chooseVehicle(i)">
-        <p class="carName">{{ vehicle.name }}</p>
-        <img src="{{ vehicle.icon }}">
-        <!-- <p class="carSeats">{{ vehicle.seats }} seats</p> -->
-        <p class="carPrice">{{currency }}{{ vehicle.fee_taxed }}</p>
-      </ion-col>
-
-    </ion-row>
-
-
     <ion-button expand="block" color="dark" [hidden]="origin" (click)="chooseDestination()">
      Acionar Técnico</ion-button>
     <ion-button expand="block" color="dark" [hidden]="!origin" (click)="book()">

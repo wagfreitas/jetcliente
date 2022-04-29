@@ -88,7 +88,6 @@ export class TrackingPage implements OnInit {
   }
 
   ionViewDidLeave() {
-    console.log("ionViewDidLeave()");
     clearInterval(this.driverTracking);
     this.dbRef.unsubscribe();
   }
@@ -130,11 +129,11 @@ export class TrackingPage implements OnInit {
     directionsDisplay.setMap(this.map);
 
     let origin = new google.maps.LatLng(this.trip.origin.location.lat, this.trip.origin.location.lng);
-    let dest = new google.maps.LatLng(this.trip.destination.location.lat, this.trip.destination.location.lng);
+   //let dest = new google.maps.LatLng(this.trip.destination.location.lat, this.trip.destination.location.lng);
 
     var request = {
       origin: origin,
-      destination: dest,
+     // destination: dest,
       travelMode: google.maps.TravelMode.DRIVING
     };
 
@@ -163,16 +162,16 @@ export class TrackingPage implements OnInit {
 
   cancelTrip() {
     this.alertCtrl.create({
-      message: "Are you sure want to cancel the trip",
+      message: "Deseja cancelar esse atendimento?",
       buttons: [{
-        text: "Yes",
+        text: "Sim",
         handler: () => {
           this.tripService.cancelTrip(this.trip.key).then(data => {
             console.log(data);
           })
         }
       }, {
-        text: "No"
+        text: "Não"
       }]
     }).then(res => res.present());
 
