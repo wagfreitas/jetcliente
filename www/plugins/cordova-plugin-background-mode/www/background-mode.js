@@ -1,5 +1,4 @@
-cordova.define("cordova-plugin-background-mode.BackgroundMode", function(require, exports, module) {
-/*
+cordova.define("cordova-plugin-background-mode.BackgroundMode", function(require, exports, module) { /*
     Copyright 2013-2017 appPlant GmbH
 
     Licensed to the Apache Software Foundation (ASF) under one

@@ -21,6 +21,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { RatingPageModule } from './rating/rating.module';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
@@ -52,6 +53,7 @@ export function createTranslateLoader(http: HttpClient) {
     StatusBar,
     SplashScreen,
     Geolocation,
+    NativeGeocoder,
     FirebaseX,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

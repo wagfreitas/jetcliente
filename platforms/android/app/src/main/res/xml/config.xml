@@ -95,4 +95,7 @@
     <preference name="Orientation" value="portrait" />
     <preference name="AndroidXEnabled" value="true" />
     <preference name="loadUrlTimeoutValue" value="700000" />
+    <feature name="NativeGeocoder">
+        <param name="android-package" value="cordova.plugin.nativegeocoder.NativeGeocoder" />
+    </feature>
 </widget>

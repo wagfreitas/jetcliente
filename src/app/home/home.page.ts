@@ -1,7 +1,6 @@
 import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { PlaceService } from '../services/place.service';
 import { SettingService } from '../services/setting.service';
-import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
 import { DealService } from '../services/deal.service';
 import { DriverService } from '../services/driver.service';
@@ -13,7 +12,6 @@ import { Router } from '@angular/router';
 import { DEAL_STATUS_PENDING, DEAL_STATUS_ACCEPTED, POSITION_INTERVAL, SHOW_VEHICLES_WITHIN, VEHICLE_LAST_ACTIVE_LIMIT, environment } from 'src/environments/environment.prod';
 import { take } from 'rxjs/operators';
 import { CommonService } from '../services/common.service';
-import * as firebase from 'firebase';
 import { AngularFireDatabase } from '@angular/fire/database';
 
 
@@ -63,9 +61,14 @@ export class HomePage implements OnInit {
   distanceText: any = '';
   durationText: any = '';
 
+  options = {
+    timeout: 10000, 
+    enableHighAccuracy: true, 
+    maximumAge: 3600
+  };
+
   constructor(
     private router: Router,
-    private alertCtrl: AlertController,
     private placeService: PlaceService,
     private geolocation: Geolocation,
     private chRef: ChangeDetectorRef,
@@ -119,23 +122,13 @@ export class HomePage implements OnInit {
 
 
   loadMap() {
-
-    // this.common.showLoader("Loading..");
-
     // busca a localização corrente do cliente
     return this.geolocation.getCurrentPosition().then((resp) => {
       // se um origem for determinada ele a usa como referencia, caso contrario ele usa a localizaçao atual do cliente
       if (this.origin) this.startLatLng = new google.maps.LatLng(this.origin.location.lat, this.origin.location.lng);
       else this.startLatLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
 
-      let directionsDisplay;
-      let directionsService = new google.maps.DirectionsService();
-      directionsDisplay = new google.maps.DirectionsRenderer({
-        polylineOptions: {
-          strokeColor: "black"
-        }
-      });
-
+    
       //aqui é criado alguns parametros para o mapa, como o ponto central do icone da posiçao inicial e o tipo do mapa no caso Roadmap
       var mapOptions: any = environment.mapOptions;
       mapOptions.center = this.startLatLng;
@@ -145,8 +138,7 @@ export class HomePage implements OnInit {
       this.map = new google.maps.Map(document.getElementById(this.mapId), mapOptions);
 
       let mapx = this.map;
-      directionsDisplay.setMap(mapx);
-
+   
       //determina uma origem caso nao exista uma e seta esse valor para o Set do Origin
       let geocoder = new google.maps.Geocoder();
       geocoder.geocode({ 'latLng': this.map.getCenter() }, (results, status) => {
@@ -193,13 +185,11 @@ export class HomePage implements OnInit {
               this.trackDrivers();
           });
         }
-      });
-
-               
+      });            
       // this.common.hideLoader();
     }).catch((error) => {
       // this.common.hideLoader();
-      console.log('Error getting location', error);
+      console.log('Erro buscando a localizaçao', error);
     });
   }
 

@@ -29,7 +29,8 @@ export const environment = {
     { name: 'española', code: 'es' },
     { name: 'عربى', code: 'ar' },
     { name: '中文', code: 'cn' }
-  ], mapOptions: {
+  ], 
+  mapOptions: {
     zoom: 12,
     mapTypeControl: false,
     zoomControl: false,
