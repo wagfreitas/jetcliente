@@ -124,14 +124,16 @@ export class PaymentsPage implements OnInit {
     this.authService.getUserData().then(user => {
       this.authService.getUser(user.uid).snapshotChanges().pipe(take(1)).subscribe((snapshot: any) => {
         this.user = { uid: snapshot.key, ...snapshot.payload.val() };
-       
+       console.log(this.user)
+
       });
     })
      this.pagseg.obterIdSession(this.credenciais).subscribe(res => {
-       this.sessionId = res.session.id;
+       this.sessionId= res.session.id
        this.pagseg.carregaPagSeguroDirectPayment(this.credenciais).then(() => {
              PagSeguroDirectPayment.setSessionId(this.sessionId);
              this.credenciais.sessionId = this.sessionId;
+             console.log(this.credenciais.sessionId)
            
            });
 
@@ -139,7 +141,7 @@ export class PaymentsPage implements OnInit {
 
   }
 
-  async buscaParcelas(dados: any) {
+  async   buscaParcelas(dados: any) {
     
     this.dados.numCard = this.ionicForm.value.numCard;
     const val  = this.ionicForm.value.valor;
@@ -169,6 +171,7 @@ export class PaymentsPage implements OnInit {
     PagSeguroDirectPayment.getBrand({
       cardBin: numCard,
       success: (response) => {
+        console.log(response)
         this.credenciais.bandCard = response.brand.name;
         this.dados.bandCard = response.brand.name;
         if (this.credenciais.bandCard === 'mastercard') {
@@ -208,7 +211,7 @@ export class PaymentsPage implements OnInit {
       expirationYear: this.dados.anoValidadeCard,
       success: response => {
         this.dados.hashCard = response.card.token;
-        console.log('Hash do cartao', this.dados);
+        console.log('token do cartao              ', this.dados);
 
         // NESTE MOMENTO JÁ TEMOS TUDO QUE PRECISAMOS!
         // HORA DE ENVIAR OS DADOS PARA O SERVIDOR PARA CONCRETIZAR O PAGAMENTO
