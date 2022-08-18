@@ -3,12 +3,12 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{'HISTORY' | translate}}</ion-title>
+    <ion-title>Histórico</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <p *ngIf="trips.length == 0" style="margin-top: 5px; text-align: center">{{'NO_TRIPS_FOUND' | translate}}</p>
+  <p *ngIf="trips.length == 0" style="margin-top: 5px; text-align: center">Nenhum Atendimento</p>
   <ion-list lines="none">
     <ion-item *ngFor="let trip of trips" (click)="viewTrip(trip)">
       <ion-icon name="car" slot="start" style="margin-right: 20px;"></ion-icon>

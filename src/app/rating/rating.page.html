@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'RATE_TRIP' | translate}}</ion-title>
+    <ion-title>Avaliar Atendimento</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="skip()">
         <ion-icon name="close-outline"></ion-icon>
@@ -14,7 +14,7 @@
 
 <ion-content>
   <div style="text-align: center;padding: 28px">
-    <p>{{ 'TRIP_COMPLETED' | translate}}</p>
+    <p>Atendimento Completado</p>
     <h1 style="font-size:36px;color:#8BC34A;font-weight: 600;"> {{ (trip)?.currency }} {{(trip)?.fee}}</h1>
     <p>{{trip.paymentMethod}}</p>
     <hr style="border-bottom: 1px solid #eee;margin-top: 24px;" />
@@ -29,6 +29,6 @@
       <ion-textarea rows="2" [(ngModel)]="feedback"></ion-textarea>
     </div>
     <br />
-    <ion-button color="dark" size="small" (click)="rateTrip()">{{ 'RATE_TRIP' | translate}}</ion-button>
+    <ion-button color="dark" size="small" (click)="rateTrip()">Avaliar</ion-button>
   </div>
 </ion-content>
