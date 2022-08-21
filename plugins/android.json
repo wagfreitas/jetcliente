@@ -50,6 +50,9 @@
     "cordova-plugin-ionic-webview": {
       "PACKAGE_NAME": "com.condsolution.jetcliente"
     },
+    "cordova-plugin-nativegeocoder": {
+      "PACKAGE_NAME": "com.condsolution.jetcliente"
+    },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.condsolution.jetcliente"
     },
@@ -58,16 +61,13 @@
     },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.condsolution.jetcliente"
-    },
-    "cordova-plugin-nativegeocoder": {
-      "PACKAGE_NAME": "com.condsolution.jetcliente"
     }
   },
   "dependent_plugins": {
-    "cordova-plugin-device": {
+    "cordova-plugin-add-swift-support": {
       "PACKAGE_NAME": "com.condsolution.jetcliente"
     },
-    "cordova-plugin-add-swift-support": {
+    "cordova-plugin-device": {
       "PACKAGE_NAME": "com.condsolution.jetcliente"
     }
   }

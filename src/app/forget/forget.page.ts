@@ -25,7 +25,7 @@ export class ForgetPage implements OnInit {
       this.authService.resetPassword(email)
         .then(() => {
           this.commonService.hideLoader();
-          this.commonService.showToast('Please Check inbox')
+          this.commonService.showToast('Verifique sua caixa de email, inclusive nos spams')
         })
         .catch(err => {
           this.commonService.hideLoader();

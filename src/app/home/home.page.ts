@@ -197,28 +197,23 @@ export class HomePage implements OnInit {
   // go to next view when the 'Book' button is clicked
   book() {
     this.locateDriver = true;
+    console.log(this.distance)
 
     // guarda detalhes do técnico
     this.tripService.setAvailableDrivers(this.activeDrivers);
    // this.tripService.setDistance(this.distance);
-    this.tripService.setFee(this.currentVehicle.fee);
+   //this.tripService.setFee(this.currentVehicle.fee);
    // this.tripService.setRawFee(this.currentVehicle.fee);
    // this.tripService.setFeeTaxed(this.currentVehicle.fee_taxed);
     this.tripService.setIcon(this.currentVehicle.icon);
-    this.tripService.setTax(this.currentVehicle.tax);
+  //  this.tripService.setTax(this.currentVehicle.tax);
    // this.tripService.setCommissionType(this.currentVehicle.commission_type)
    // this.tripService.setCommissionValue(this.currentVehicle.commission_value)
-    this.tripService.setCommission(this.currentVehicle.commission)
+   // this.tripService.setCommission(this.currentVehicle.commission)
     // this.tripService.setPaymentMethod('');
     this.drivers = this.tripService.getAvailableDrivers();
     // ordena técnicos por avaliação e distancia
     this.drivers = this.dealService.sortDriversList(this.drivers);
-
-    console.log(this.drivers)
-
-    //aplica desconto
-
-
 
     if (this.drivers) {
       this.makeDeal(0);
@@ -228,10 +223,9 @@ export class HomePage implements OnInit {
 
   makeDeal(index) {
     let driver = this.drivers[index];
+    console.log(driver)
     this.distance = driver.distance
     let dealAccepted = false;
-
-      console.log(driver.distance)
 
     if (driver) {
       driver.status = 'Bidding';
@@ -239,8 +233,6 @@ export class HomePage implements OnInit {
         // if user is available
         if (snapshot == null) {
           // create a record
-          console.log(this.user);
-
           this.dealService.makeDeal(
             this.user.uid,
             driver.key,
@@ -259,7 +251,6 @@ export class HomePage implements OnInit {
                   this.nextDriver(index);
                 } else if (snap.status == DEAL_STATUS_ACCEPTED) {
                   // if deal is accepted
-                  console.log('accepted', snap.tripId);
                   dealAccepted = true;
                   this.locateDriver = false;
 
@@ -345,13 +336,14 @@ export class HomePage implements OnInit {
       // clear vehicles
       this.clearDrivers();
       if (snapshot != null) {
+        console.log(snapshot)
         // only show near vehicle
         snapshot.forEach(vehicle => {
           //calcula a distancia entre o solicitante e o tecnico
           let distance = this.placeService.calcCrow(vehicle.lat, vehicle.lng, this.origin.location.lat, this.origin.location.lng);
 
           // se a distancia for menor que o previsto ele sera adicionado ao mapa 
-          if (distance < SHOW_VEHICLES_WITHIN) {
+          if (distance < SHOW_VEHICLES_WITHIN && Date.now() - vehicle.last_active < VEHICLE_LAST_ACTIVE_LIMIT) {
             //&& Date.now() - vehicle.last_active < VEHICLE_LAST_ACTIVE_LIMIT
             // create or update
             let latLng = new google.maps.LatLng(vehicle.lat, vehicle.lng);

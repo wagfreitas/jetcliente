@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="dark">
-    <ion-title>Técnico a Caminho</ion-title>
+    <ion-title>{{titulo}}</ion-title>
     <ion-buttons slot="end">
       <ion-button color="danger" fill="solid" size="small" *ngIf="trip.status == 'waiting'" (click)="cancelTrip()">
         Cancelar
@@ -15,23 +15,23 @@
 <ion-content>
   <div id="map" style="height:100%"></div>
   <ion-card>
-    <div style="text-align:right; color: #222">
-      <span style="background:#ffff00">COD: {{ (trip)?.otp }}</span>
+    <div style="text-align:right; color: #222" *ngIf="trip.status != 'going'">
+      <span style="background:#ffff00">Código do Cliente: {{ (trip)?.otp }}</span>
     </div>
     <ion-item lines="none">
       <ion-avatar slot="start">
         <img src="{{ (driver)?.photoURL }}" onerror="this.src='./assets/img/default.png'" />
       </ion-avatar>
       <ion-label>
-        <ion-text>
+        <ion-text color="dark">
           <h2>{{ (driver)?.name }} &nbsp; {{(driver)?.rating}} <ion-icon name="star" color="yellow"></ion-icon>
           </h2>
         </ion-text>
-        <ion-text>
+        <ion-text color = "dark">
           <p>{{ (driver)?.plate }} &middot; {{ (driver)?.brand }}</p>
         </ion-text>
       </ion-label>
-      <ion-button color="dark" slot="end" href="tel: {{ (driver)?.phoneNumber }} ">
+      <ion-button color="dark" *ngIf="trip.status != 'going'" slot="end" href="tel: {{ (driver)?.phoneNumber }} ">
         <ion-icon name="call"></ion-icon>&nbsp;Chamar
       </ion-button>
     </ion-item>
@@ -43,10 +43,6 @@
       <ion-col>
         <p>Tempo</p>
         <h5>{{durationText}}</h5>
-      </ion-col>
-      <ion-col>
-        <p>Valor</p>
-        <h5>{{ trip.currency }} {{trip.fee}}</h5>
       </ion-col>
       <ion-col>
         <p>Tipo Pgto</p>

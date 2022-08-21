@@ -5,7 +5,6 @@ import { CommonService } from '../services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PagSeguroService } from '../services/pag-seguro.service';
 
-
 declare var Stripe: any;
 
 declare let PagSeguroDirectPayment;
@@ -75,14 +74,16 @@ export class PaymentsPage implements OnInit {
   isSubmitted = false;
   parcelas = [];
   estados = [];
-  public credencial: Item;
+  public credencial: Item;awaitasybc
   public dados = new Dados();
   thumbnail: string;
+  trip: any = {};
 
   credenciais: Item = {
     id: 'credenciais',
     email: 'vinassis@gmail.com',
-    token: '90FFE24A8F314FD98F0F29712BE30EEB',
+    token: 'E93E5B3C9A9A596114021F9CF03278A3',
+    //token: '90FFE24A8F314FD98F0F29712BE30EEB',
     isSandbox: true,
     sessionId: '',
     urlTransacao: 'https://ws.sandbox.pagseguro.uol.com.br/v2/transactions/',
@@ -143,7 +144,6 @@ export class PaymentsPage implements OnInit {
     
     this.dados.numCard = this.ionicForm.value.numCard;
     const val  = this.ionicForm.value.valor;
-    console.log('dados', dados);
     this.dados.amount = val.replace(',', '.');
     //  this.dados.bandCard = dados.numCar
     await PagSeguroDirectPayment.getInstallments({
@@ -181,7 +181,6 @@ export class PaymentsPage implements OnInit {
           console.log("bandeira generica")
           this.thumbnail ='../../assets/icon/card.png';
         }
-        console.log('Bandeira do cartão: ' + this.credenciais.bandCard);
         this.buscaParcelas(this.credenciais);
 
       },
@@ -194,9 +193,6 @@ export class PaymentsPage implements OnInit {
     // BUSCA O HASH DO COMPRADOR JUNTO A API DO PAGSEGURO
     this.dados.hashComprador = PagSeguroDirectPayment.getSenderHash();
 
-    console.log("dados no pagar", this.dados)
-
-    //console.log("hash", this.dados.hashComprador)
     // CRIA O HASK DO CARTÃO DE CRÉDITO JUNTO A API DO PAGSEGURO
 
    
@@ -208,7 +204,7 @@ export class PaymentsPage implements OnInit {
       expirationYear: this.dados.anoValidadeCard,
       success: response => {
         this.dados.hashCard = response.card.token;
-        console.log('Hash do cartao', this.dados);
+       
 
         // NESTE MOMENTO JÁ TEMOS TUDO QUE PRECISAMOS!
         // HORA DE ENVIAR OS DADOS PARA O SERVIDOR PARA CONCRETIZAR O PAGAMENTO
@@ -302,8 +298,7 @@ export class PaymentsPage implements OnInit {
             }
         }
       };
-      console.log('body------', pagDados);
-  
+     
      this.pagseg.enviarPgto(pagDados).subscribe(res =>{
        console.log("mensagem", res.mensagem)
        if (res.mensagem) {

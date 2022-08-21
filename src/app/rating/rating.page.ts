@@ -21,7 +21,6 @@ export class RatingPage implements OnInit {
     private navParams: NavParams,
     private modalCtrl: ModalController
   ) {
-    console.log(this.navParams.data);
     this.driver = this.navParams.get('driver');
     this.trip = this.navParams.get('trip');
   }
@@ -30,19 +29,17 @@ export class RatingPage implements OnInit {
   }
 
   onRateChange(event) {
-    console.log(event);
     this.rating = event;
   }
 
   rateTrip() {
-    console.log(this.rating);
     this.tripService.rateTrip(this.trip.key, this.rating, this.feedback).then(() => {
-      this.common.showToast("Thanks for your rating");
+      this.common.showToast("Grato por sua Avaliação");
       this.tripService.finishTrip(this.trip.key);
       this.modalCtrl.dismiss();
     }).catch((err) => {
       console.log(err)
-      this.common.showToast("Something went wrong");
+      this.common.showToast("Algo errado");
       this.modalCtrl.dismiss();
     });
   }

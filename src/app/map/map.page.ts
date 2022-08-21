@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { PlaceService } from '../services/place.service';
 import { TripService } from '../services/trip.service';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -17,17 +17,21 @@ declare var google: any;
 
 export class MapPage implements OnInit {
 
-  ngOnInit() {
-  }
-
+  @ViewChild('map',  {static: false}) mapElement: ElementRef;
   map: any;
-
-  // pin address
-  address: any;
-  marker: any;
-  lat: any;
-  lng: any;
+  address:any;
+  lat: string;
+  lng: string;  
+  autocomplete: { input: string; };
+  autocompleteItems: any[];
+  location: any;
+  placeid: any;
   googleAutocomplete: any;
+
+
+
+ 
+  marker: any;
 
   options = {
     timeout: 10000, 
@@ -35,11 +39,11 @@ export class MapPage implements OnInit {
     maximumAge: 3600
   };
 
-    // geocoder options
-    nativeGeocoderOptions: NativeGeocoderOptions = {
-      useLocale: true,
-      maxResults: 5
-    };
+  // geocoder options
+  nativeGeocoderOptions: NativeGeocoderOptions = {
+    useLocale: true,
+    maxResults: 5
+  };
 
   constructor(
     private router: Router,
@@ -48,24 +52,33 @@ export class MapPage implements OnInit {
     private route: ActivatedRoute,
     private placeService: PlaceService,
     private tripService: TripService,
-    private nativeGeocoder: NativeGeocoder) {
+    private nativeGeocoder: NativeGeocoder,
+    public zone: NgZone,) {
+      this.googleAutocomplete = new google.maps.places.AutocompleteService();
+      this.autocomplete = { input: '' };
+      this.autocompleteItems = [];
+  }
+
+  ngOnInit() {
+   
   }
 
   // Load map only after view is initialized
   ionViewDidEnter() {
-   this.loadMap();
+    this.loadMap();
   }
 
   loadMap() {
     // set current location as map center
     this.geolocation.getCurrentPosition().then((resp) => {
       let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-      let mapOptions: any = environment.mapOptions;
-      mapOptions.center = latLng;
-      mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
-
+      let mapOptions = {
+        center: latLng,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      } 
+     
       this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
       this.marker = new google.maps.Marker({
         map: this.map,
         position: latLng
@@ -73,9 +86,9 @@ export class MapPage implements OnInit {
       this.marker.setMap(this.map);
 
       // get center's address
-     // this.findPlace(latLng);
+    // this.findPlace(latLng);
 
-      this.map.addListener('center_changed', (event) => {
+      this.map.addListener('center_changed', () => {
         let center = this.map.getCenter();
         this.findPlace(center);
       })
@@ -83,47 +96,21 @@ export class MapPage implements OnInit {
       console.log('Error getting location', error);
     });
 
-
     var nativeHomeInputBox = document.getElementById('searchbar');
-
-
-
     this.googleAutocomplete = new google.maps.places.Autocomplete(nativeHomeInputBox);
+    
     google.maps.event.addListener(this.googleAutocomplete, 'place_changed', () => {
       this.lat = this.googleAutocomplete.getPlace().geometry.location.lat();
       this.lng = this.googleAutocomplete.getPlace().geometry.location.lng();
 
       console.log(this.lat, this.lng)
       this.map.panTo(new google.maps.LatLng(this.lat, this.lng));
-      this.address = this.getAddress(this.lat, this.lng)
+      this.address =this.findPlace(new google.maps.LatLng(this.lat, this.lng));
      // this.findPlace(new google.maps.LatLng(this.lat, this.lng));
     });
   }
 
-  getAddress(lat,long){
-    this.nativeGeocoder.reverseGeocode(lat, long, this.nativeGeocoderOptions)
-    .then((res: NativeGeocoderResult[]) => {
-      this.address = this.pretifyAddress(res[0]);
-    })
-    .catch((error: any) => {
-      alert('Error getting location'+ JSON.stringify(error));
-    });
-  }
-  // address
-  pretifyAddress(address){
-    let obj = [];
-    let data = "";
-    for (let key in address) {
-      obj.push(address[key]);
-    }
-    obj.reverse();
-    for (let val in obj) {
-      if(obj[val].length)
-      data += obj[val]+', ';
-    }
-    return address.slice(0, -2);
-  }
-
+  
   // find address by LatLng
   findPlace(latLng) {
     let geocoder = new google.maps.Geocoder();
@@ -140,11 +127,10 @@ export class MapPage implements OnInit {
     });
   }
 
-  // choose address and go back to home page
+  // Seleciona a origem do atendimento e retorna para a pagina de home
   selectPlace() {
 
     let address = this.placeService.formatAddress(this.address);
-   
     this.route.queryParams.subscribe(data => {
       this.tripService.setOrigin(address.vicinity, address.location.lat, address.location.lng);
      

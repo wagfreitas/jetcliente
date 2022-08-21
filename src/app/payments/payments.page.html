@@ -11,13 +11,15 @@
   <form [formGroup]="ionicForm" (ngSubmit)="submitForm(ionicForm.value)" novalidate>
     <ion-grid>
       <ion-row>
-        <ion-col size="3">
-          <ion-label position="floating" color="primary">Valor</ion-label>
+        <ion-col size="7">
+          <ion-label position="floating" color="primary">Valor R$ </ion-label>
           <ion-input type="float" formControlName="valor"> </ion-input>
         </ion-col>
-        <ion-col size="9">
-          <ion-label position="floating" color="primary">Numero Cartão</ion-label>
-          <ion-input (ionInput)="buscaBandeira()" formControlName="numCard" type="text">
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-label position="floating" color="primary">Número Cartão</ion-label>
+          <ion-input (ionInput)="buscaBandeira()" formControlName="numCard" placeholder="NÃO UTILIZE ESPAÇOS"type="text">
             <ion-img position="fixed" class="vehicle-img" src={{thumbnail}}></ion-img>
           </ion-input>
         </ion-col>
@@ -26,7 +28,7 @@
 
         <ion-col col-4>
           <ion-label position="floating" color="primary">Mês Val.</ion-label>
-          <ion-input formControlName="mesValCard" maxlength="2" placeholder="MES" type="number"></ion-input>
+          <ion-input formControlName="mesValCard" maxlength="2" placeholder="MÊS" type="number"></ion-input>
         </ion-col>
         <ion-col col-4>
           <ion-label position="floating" color="primary">Ano Val. </ion-label>
@@ -48,7 +50,7 @@
 
       <ion-row>
         <ion-col col-12>
-          <ion-label color="primary">Parcelas</ion-label>
+          <ion-label color="primary">No. de Parcelas</ion-label>
           <ion-select class="custom-options" interface="action-sheet"  formControlName="parcelas"  ok-text="OK" cancel-text="Fechar">
             <ion-select-option *ngFor="let p of parcelas"
               [value]="[{ quantity: p['quantity'], installmentAmount: p['installmentAmount'] }]">

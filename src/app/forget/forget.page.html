@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{'RESET_PASSWORD' | translate}}</ion-title>
+    <ion-title>Esqueceu a Senha</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -15,12 +15,12 @@
   <div class="ion-padding">
     <ion-list lines="none">
       <ion-item>
-        <ion-label position="stacked">{{'EMAIL_ADDRESS' | translate }}</ion-label>
+        <ion-label position="stacked">Email</ion-label>
         <ion-input type="text" [(ngModel)]="email"></ion-input>
       </ion-item>
     </ion-list>
     <div style="padding:0px 16px">
-      <ion-button color="dark" expand="block" (click)="reset()">{{'RESET_PASSWORD' | translate }}</ion-button>
+      <ion-button color="dark" expand="block" (click)="reset()">Solicitar Nova Senha</ion-button>
     </div>
   </div>
 </ion-content>

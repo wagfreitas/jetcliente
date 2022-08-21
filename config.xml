@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.condsolution.jetcliente" version="1.1.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.condsolution.jetcliente" version="1.1.13" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>JetPortCliente</name>
     <description>JetPortCliente</description>
     <author email="wagfreitas@hotmail.com" href="https://www.jetport.com.br/">JetPort Portões</author>
@@ -26,14 +26,14 @@
     <preference name="Orientation" value="portrait" />
     <preference name="AndroidXEnabled" value="true" />
     <platform name="android">
-        <preference name="loadUrlTimeoutValue" value="700000" />
+        <preference name="loadUrlTimeoutValue" value="7000000" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
             <application android:networkSecurityConfig="@xml/network_security_config" />
         </edit-config>
         <config-file parent="./" target="app/src/main/AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
             <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-            <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+            <uses-feature android:name="android.hardware.location.gps" android:required="true" />
         </config-file>
         <resource-file src="resources/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
         <allow-intent href="market:*" />

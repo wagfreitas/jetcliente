@@ -10,6 +10,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { RatingPage } from '../rating/rating.page';
 import { SettingService } from '../services/setting.service';
 
+
 declare var google: any;
 
 @Component({
@@ -33,6 +34,8 @@ export class TrackingPage implements OnInit {
   ref: any;
   settings: any = {};
   dbRef: any;
+  titulo: string;
+  atendendo: boolean = false;
 
   constructor(
     private driverService: DriverService,
@@ -54,15 +57,14 @@ export class TrackingPage implements OnInit {
 
   ionViewDidEnter() {
     this.menuCtrl.enable(true);
+    this.titulo = "Técnico a Caminho"
     let tripId = this.tripService.getId();
 
     this.dbRef = this.tripService.getTrip(tripId).valueChanges().subscribe((snapshot: any) => {
       if (snapshot != null) {
-        console.log(this.trip)
+        
         this.trip = snapshot;
-
-        console.log(this.trip);
-
+       
         if (this.trip.status == TRIP_STATUS_CANCELED) {
           clearInterval(this.driverTracking);
           this.dbRef.unsubscribe();
@@ -71,7 +73,7 @@ export class TrackingPage implements OnInit {
         else if (this.trip.status == TRIP_STATUS_FINISHED) {
           clearInterval(this.driverTracking);
           this.dbRef.unsubscribe();
-          this.router.navigateByUrl('/home', { skipLocationChange: true, replaceUrl: true });
+          this.router.navigateByUrl('/payments', { skipLocationChange: true, replaceUrl: true });
           this.modalCtrl.create({
             component: RatingPage,
             componentProps: {
@@ -79,6 +81,9 @@ export class TrackingPage implements OnInit {
               driver: this.driver
             }
           }).then(m => m.present());
+        } else if (this.trip.status == TRIP_STATUS_GOING){
+          clearInterval(this.driverTracking);
+          this.titulo = "Em atendimento"
         }
 
         this.loadMap();
@@ -95,12 +100,8 @@ export class TrackingPage implements OnInit {
 
 
 
-  loadMap() {
-
-    console.log("load Map calling");
+  loadMap() { 
     let latLng = new google.maps.LatLng(this.trip.origin.location.lat, this.trip.origin.location.lng);
-
-
     let mapOptions: any = environment.mapOptions;
     mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
     mapOptions.center = latLng;
@@ -139,7 +140,6 @@ export class TrackingPage implements OnInit {
 
     directionsService.route(request, function (response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
-        console.log(response);
         directionsDisplay.setDirections(response);
         directionsDisplay.setMap(this.map);
       } else {
@@ -209,22 +209,21 @@ export class TrackingPage implements OnInit {
       }
     }
 
-    else {
-      request = {
-        origin: latLng,
-        destination: new google.maps.LatLng(this.trip.destination.location.lat, this.trip.destination.location.lng),
-        travelMode: google.maps.TravelMode.DRIVING
-      }
-    }
+    // else {
+    //   request = {
+    //     origin: latLng,
+    //     destination: new google.maps.LatLng(this.trip.destination.location.lat, this.trip.destination.location.lng),
+    //     travelMode: google.maps.TravelMode.DRIVING
+    //   }
+    // }
 
-    directionsService.route(request, (response, status) => {
-      if (status == google.maps.DirectionsStatus.OK) {
-        console.log(response);
-        this.distanceText = response.routes[0].legs[0].distance.text;
-        this.durationText = response.routes[0].legs[0].duration.text;
-      } else {
-        console.log("error");
-      }
-    });
+    // directionsService.route(request, (response, status) => {
+    //   if (status == google.maps.DirectionsStatus.OK) {
+    //     this.distanceText = response.routes[0].legs[0].distance.text;
+    //     this.durationText = response.routes[0].legs[0].duration.text;
+    //   } else {
+    //     console.log("error");
+    //   }
+    // });
   }
 }
