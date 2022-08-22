@@ -25,11 +25,11 @@
           "./": [
             {
               "xml": "<uses-permission android:name=\"android.permission.FOREGROUND_SERVICE\" />",
-              "count": 14
+              "count": 17
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
-              "count": 14
+              "count": 17
             },
             {
               "xml": "<uses-feature android:name=\"android.hardware.location.gps\" android:required=\"false\" />",
@@ -37,7 +37,7 @@
             },
             {
               "xml": "<uses-feature android:name=\"android.hardware.location.gps\" android:required=\"true\" />",
-              "count": 10
+              "count": 13
             }
           ]
         }
